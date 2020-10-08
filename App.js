@@ -124,11 +124,11 @@ export default function App() {
         <View style={styles.taskbox__button}>
           <TouchableOpacity
             onPress={() => {
-              addTask(textInputRef.value);
+              const re = /^(?!\s*$).+/g;
+              if (re.test(textInputRef.value)) addTask(textInputRef.value);
               textInputRef.clear();
               textInputRef.focus();
             }}
-            disabled={textInputRef.value === ''}
             style={styles.appButtonContainer}>
             <Text style={styles.appButtonText}>Add Task</Text>
           </TouchableOpacity>
