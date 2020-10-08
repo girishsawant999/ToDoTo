@@ -1,3 +1,8 @@
+import {
+  Ubuntu_500Medium,
+  Ubuntu_700Bold,
+  useFonts,
+} from '@expo-google-fonts/ubuntu';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React from 'react';
 import {
@@ -18,7 +23,11 @@ export default function App() {
       ? JSON.parse(localStorage.getItem('tasks'))
       : []
   );
-  const [task, settask] = React.useState('');
+  let textInputRef = React.createRef();
+  let [fontsLoaded] = useFonts({
+    Ubuntu_500Medium,
+    Ubuntu_700Bold,
+  });
 
   const addTask = (task) => {
     let new_task = [
@@ -96,14 +105,18 @@ export default function App() {
     </View>
   );
 
+  if (!fontsLoaded) {
+    return <View style={styles.container}></View>;
+  }
   return (
     <View style={styles.container}>
       <View style={styles.taskbox}>
         <View style={styles.taskbox__input}>
           <TextInput
-            onChangeText={(text) => {
-              settask(text);
+            ref={(input) => {
+              textInputRef = input;
             }}
+            placeholder="Enter the task"
             autoFocus={true}
             style={styles.taskbox__input_}
           />
@@ -111,10 +124,11 @@ export default function App() {
         <View style={styles.taskbox__button}>
           <TouchableOpacity
             onPress={() => {
-              addTask(task);
-              settask('');
+              addTask(textInputRef.value);
+              textInputRef.clear();
+              textInputRef.focus();
             }}
-            disabled={task === ''}
+            disabled={textInputRef.value === ''}
             style={styles.appButtonContainer}>
             <Text style={styles.appButtonText}>Add Task</Text>
           </TouchableOpacity>
@@ -152,6 +166,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 5,
+    fontFamily: 'Ubuntu_500Medium',
   },
   taskbox__button: {
     flex: 2,
@@ -169,6 +184,7 @@ const styles = StyleSheet.create({
   appButtonText: {
     color: Colors.primary,
     fontWeight: '600',
+    fontFamily: 'Ubuntu_700Bold',
   },
   tasks: {
     flex: 1,
@@ -194,6 +210,9 @@ const styles = StyleSheet.create({
   task__title: {
     flex: 6,
     alignSelf: 'flex-start',
+  },
+  title: {
+    fontFamily: 'Ubuntu_500Medium',
   },
   title_done: {
     color: Colors.primary,
