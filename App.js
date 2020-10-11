@@ -21,6 +21,7 @@ import { _retrieveData, _storeData } from './storage';
 export default function App() {
   const [tasks, settasks] = React.useState([]);
   const [content, setcontent] = React.useState('');
+  const [added, setadded] = React.useState(false);
   let textInputRef = React.createRef();
   let flatListRef = React.createRef();
   let [fontsLoaded] = useFonts({
@@ -39,9 +40,9 @@ export default function App() {
       value: capitalizeFirstLetter(task),
       status: false,
     });
+    setadded(true);
     settasks(new_task.map((item) => item));
     _storeData(new_task);
-    flatListRef.scrollToEnd({ animated: true });
   };
 
   const deleteTask = (id) => {
@@ -147,6 +148,12 @@ export default function App() {
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
           extraData={tasks}
+          onContentSizeChange={(added) => {
+            if (added) {
+              flatListRef.scrollToEnd({ animated: true });
+              setadded(false);
+            }
+          }}
         />
       </SafeAreaView>
     </View>
