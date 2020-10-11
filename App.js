@@ -10,8 +10,6 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
-  TouchableHighlight,
   TouchableNativeFeedback,
   View,
 } from 'react-native';
@@ -160,10 +158,10 @@ export default function App() {
             background={TouchableNativeFeedback.Ripple(
               Colors.primary_light,
               false,
-              35
+              30
             )}>
             <View style={styles.appButtonContainer}>
-              <Text style={styles.appButtonText}>Add Task</Text>
+              <Text style={styles.appButtonText}>Add</Text>
             </View>
           </TouchableNativeFeedback>
         </View>
@@ -222,6 +220,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     display: 'flex',
     justifyContent: 'center',
+    alignItems: 'center',
     alignSelf: 'center',
     paddingHorizontal: 10,
     paddingVertical: 5,
@@ -230,6 +229,8 @@ const styles = StyleSheet.create({
   },
   appButtonText: {
     color: Colors.primary,
+    paddingHorizontal: 10,
+    textAlign: 'center',
     fontWeight: '600',
     fontFamily: 'Ubuntu_700Bold',
   },
