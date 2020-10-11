@@ -11,6 +11,8 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  TouchableHighlight,
+  TouchableNativeFeedback,
   View,
 } from 'react-native';
 import 'react-native-get-random-values';
@@ -66,10 +68,24 @@ export default function App() {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
+  const randomHexColor = () => {
+    return '#000000'.replace(/0/g, function () {
+      return (~~(Math.random() * 16)).toString(16);
+    });
+  };
+  const [rippleColor, setRippleColor] = React.useState(randomHexColor());
+  const [rippleOverflow, setRippleOverflow] = React.useState(false);
+
   const renderItem = ({ item }) => (
     <View style={styles.task}>
-      <View style={styles.task__switch}>
-        <TouchableOpacity onPress={() => changeStatus(item.id)}>
+      <TouchableNativeFeedback
+        onPress={() => changeStatus(item.id)}
+        background={TouchableNativeFeedback.Ripple(
+          Colors.primary_light,
+          true,
+          30
+        )}>
+        <View style={styles.task__switch}>
           {item.status ? (
             <MaterialCommunityIcons
               name="checkbox-marked"
@@ -83,27 +99,32 @@ export default function App() {
               color={Colors.primary}
             />
           )}
-        </TouchableOpacity>
-      </View>
-      <View style={styles.task__title}>
-        <TouchableOpacity onPress={() => changeStatus(item.id)}>
+        </View>
+      </TouchableNativeFeedback>
+      <TouchableNativeFeedback
+        onPress={() => changeStatus(item.id)}
+        background={TouchableNativeFeedback.Ripple(Colors.primary_light, true)}>
+        <View style={styles.task__title}>
           <Text
             style={
               item.status ? [styles.title, styles.title_done] : styles.title
             }>
             {item.value}
           </Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.task__delete}>
-        <TouchableOpacity onPress={() => deleteTask(item.id)}>
+        </View>
+      </TouchableNativeFeedback>
+
+      <TouchableNativeFeedback
+        onPress={() => setTimeout(() => deleteTask(item.id), 200)}
+        background={TouchableNativeFeedback.Ripple(Colors.red_light, true, 30)}>
+        <View style={styles.task__delete}>
           <MaterialCommunityIcons
             name="delete-forever"
             size={24}
             color={Colors.red}
           />
-        </TouchableOpacity>
-      </View>
+        </View>
+      </TouchableNativeFeedback>
     </View>
   );
 
@@ -130,15 +151,21 @@ export default function App() {
           />
         </View>
         <View style={styles.taskbox__button}>
-          <TouchableOpacity
+          <TouchableNativeFeedback
             onPress={() => {
               const re = /^(?!\s*$).+/g;
               if (re.test(content)) addTask(content);
               setcontent('');
             }}
-            style={styles.appButtonContainer}>
-            <Text style={styles.appButtonText}>Add Task</Text>
-          </TouchableOpacity>
+            background={TouchableNativeFeedback.Ripple(
+              Colors.primary_light,
+              false,
+              35
+            )}>
+            <View style={styles.appButtonContainer}>
+              <Text style={styles.appButtonText}>Add Task</Text>
+            </View>
+          </TouchableNativeFeedback>
         </View>
       </View>
       <SafeAreaView style={styles.tasks}>
@@ -163,30 +190,33 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: Platform.OS === 'ios' ? 0 : Constants.statusBarHeight + 8,
+    marginTop: Platform.OS === 'ios' ? 0 : Constants.statusBarHeight,
   },
   taskbox: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 5,
+    paddingBottom: 8,
+    paddingTop: 16,
     backgroundColor: Colors.primary,
   },
   taskbox__input: {
-    flex: 8,
-    marginHorizontal: 10,
+    flex: 7,
+    marginStart: 10,
+    marginEnd: 5,
   },
   taskbox__input_: {
     flex: 1,
     backgroundColor: Colors.white,
     paddingHorizontal: 10,
     paddingVertical: 5,
-    borderRadius: 5,
+    borderRadius: 20,
     fontFamily: 'Ubuntu_500Medium',
     height: 40,
   },
   taskbox__button: {
     flex: 2,
-    marginHorizontal: 10,
+    marginStart: 5,
+    marginEnd: 10,
   },
   appButtonContainer: {
     backgroundColor: Colors.white,
@@ -195,7 +225,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     paddingHorizontal: 10,
     paddingVertical: 5,
-    borderRadius: 5,
+    borderRadius: 20,
     height: 40,
   },
   appButtonText: {
@@ -219,6 +249,8 @@ const styles = StyleSheet.create({
 
   task__switch: {
     flex: 1,
+    alignItems: 'center',
+    marginEnd: 5,
   },
   checkbox: {
     color: Colors.primary,
@@ -237,7 +269,7 @@ const styles = StyleSheet.create({
   },
   task__delete: {
     flex: 1,
-    alignItems: 'flex-end',
+    alignItems: 'center',
     justifyContent: 'center',
   },
 });
