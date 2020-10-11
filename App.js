@@ -29,7 +29,6 @@ export default function App() {
     Ubuntu_700Bold: require('./Components/assets/fonts/Ubuntu-Bold.ttf'),
   });
   React.useEffect(() => {
-    AsyncStorage.clear();
     _retrieveData().then((value) => value && settasks(value));
     return () => {};
   }, []);
