@@ -4,7 +4,6 @@ import Constants from 'expo-constants';
 import { useFonts } from 'expo-font';
 import React from 'react';
 import {
-  AsyncStorage,
   FlatList,
   Platform,
   SafeAreaView,
@@ -124,7 +123,7 @@ export default function App() {
             onSubmitEditing={() => {
               const re = /^(?!\s*$).+/g;
               if (re.test(content)) addTask(content);
-              textInputRef.clear();
+              setcontent('');
             }}
           />
         </View>
@@ -133,7 +132,7 @@ export default function App() {
             onPress={() => {
               const re = /^(?!\s*$).+/g;
               if (re.test(content)) addTask(content);
-              textInputRef.clear();
+              setcontent('');
             }}
             style={styles.appButtonContainer}>
             <Text style={styles.appButtonText}>Add Task</Text>
@@ -178,6 +177,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: 5,
     fontFamily: 'Ubuntu_500Medium',
+    height: 40,
   },
   taskbox__button: {
     flex: 2,
@@ -191,6 +191,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 5,
+    height: 40,
   },
   appButtonText: {
     color: Colors.primary,
